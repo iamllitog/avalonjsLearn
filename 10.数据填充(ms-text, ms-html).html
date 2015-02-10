@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="avalon.min.js"></script>
+</head>
+<body>
+<script>
+        //默认情况下，我们是使用{{ }} 进行插值，如果有特殊需求，我们还可以配置它们
+        //注意，不要用<, > 作为插值表达式的界定符，因为在IE6-9里可能转换为注释节点
+        //有些问题，尽量不要使用
+        avalon.config({
+            interpolate:["[[","]]"]
+        })
+
+        avalon.define({
+            $id: "test",
+            text: "<b> 1111  </b>",
+            test : 'haha'
+        })
+
+
+</script>
+<div ms-controller="test">
+    <div><em>用于测试是否被测除</em>xxxx[[text]]yyyy</div>
+    <div><em>用于测试是否被测除</em>xxxx[[text|html]]yyyy</div>
+    <div ms-text="text"><em>用于测试是否被测除</em>xxxx yyyy</div>
+    <div ms-html="text"><em>用于测试是否被测除</em>xxxx yyyy</div>
+    <div>[[test]]</div>
+</div>
+</body>
+</html>

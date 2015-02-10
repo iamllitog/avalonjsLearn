@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="avalon.min.js"></script>
+</head>
+<body>
+<!--利用VM中的某些属性对表单元素进行双向绑定-->
+<!--它除了负责将VM中对应的值放到表单元素的value中，还对元素偷偷绑定一些事件，用于监听用户的输入从而自动刷新VM-->
+<!--对于select type=multiple与checkbox等表示一组的元素， 需要对应一个数组；其他表单元素则需要对应一个简单的数据类型；如果你就是想表示一个开关，那你们可以在radio, checkbox上使用ms-duplex-checked，需要对应一个布尔-->
+
+<div ms-controller="box">
+    <ul>
+        <li><input type="checkbox" ms-click="checkAll" ms-attr-checked="checkAllbool"/>全选</li>
+        <li ms-repeat="arr"><input type="checkbox" ms-attr-value="el" ms-duplex="selected"/>{{el}}</li>
+        <!--
+            注意：ms-duplex与ms-checked不能在同时使用于一个元素节点上。
+            注意：如果表单元素同时绑定了ms-duplex=xxx与ms-click或ms-change，而事件回调要立即得到这个vm.xxx的值，input[type=radio]是存在问题，它不能立即得到当前值，而是之前的值，需要在回调里面加个setTimeout。
+        -->
+    </ul>
+</div>
+
+<!--对于非radio, checkbox, select的控件，我们可以通过data-duplex-changed来指定一个回调，传参为元素的value值，this指向元素本身，要求必须有返回值。返回值是处理过后的字符串-->
+<div ms-controller="changeTest">
+    <input ms-duplex="username" data-duplex-changed="callback">
+</div>
+<script>
+    var vm = avalon.define({
+        $id: "box",
+        arr: ["1", '2', "3", "4"],
+        selected: ["2", "3"],
+        checkAllbool: false,
+        checkAll: function () {
+            if (this.checked) {
+                vm.selected = vm.arr
+            } else {
+                vm.selected.clear()
+            }
+        }
+    })
+    vm.checkAllbool = vm.arr.length === vm.selected.length
+    vm.selected.$watch("length", function (n) {
+        vm.checkAllbool = n === vm.arr.size()
+    })
+
+    //ms-duplex-checked(只能应用于radio、 checkbox):通过checked属性同步VM
+    //ms-duplex-string (应用于所有表单元素):通过value属性同步VM
+    //ms-duplex-boolean(应用于所有表单元素):value为”true”时转为true，其他值转为false同步VM
+    //ms-duplex-number (应用于表单元素):如果value是数字格式就转换为数值，否则不做转换，然后再同步VM
+    //ms-duplex (相当于ms-duplex-string):通过value属性同步VM
+
+    var changeTestVM = avalon.define({
+        $id: "changeTest",
+        username : "司徒正美",
+        callback : function(val){
+            avalon.log(val)
+            avalon.log(this)
+            return this.value = val.slice(0, 10)//不能超过10个字符串
+        }
+    })
+</script>
+</body>
+</html>

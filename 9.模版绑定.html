@@ -1,0 +1,35 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="avalon.min.js"></script>
+    <script>
+        var includeMode = avalon.define({
+            $id: "test",
+            xxx: "引入内部模板",
+            loaded : function (tmp) {
+                alert(tmp);
+                return tmp;
+            },
+            loadover : function () {
+                alert('加载完成');
+            }
+        })
+        //注意，ms-include的值要用引号括起，表示这只是一个字符串，这时它就会搜索页面的具有此ID的节点，取其innerHTML，放进ms-include所在的元素内部。否则这个tpl会被当成一个变量， 框架就会在VM中检测有没有此属性，有就取其值，重复上面的步骤。
+    </script>
+</head>
+<body >
+
+<script type="avalon" id="tpl">
+            here, {{ 3 + 6 * 5  }}
+</script>
+<div ms-controller="test">
+    <p>{{xxx}}</p>
+    <div ms-include="'tpl'" data-include-loaded="loaded" data-include-rendered="loadover" data-include-replace="true"></div>
+    <!--在模板加载后，加工一下模板，可以使用data-include-loaded来指定回调的名字。-->
+    <!--ms-include绑定需要定义在一个元素节点上，它的作用仅仅是一个占位符，提供一个插入位置的容器。 如果用户想在插入内容后，去掉这容器，可以使用data-include-replace="true"。（审查元素查看div已经消失）-->
+    <div  ms-include-src="'tmpl.html'"></div>
+    <!--引用外部模板-->
+</div>
+
+</body>
+</html>

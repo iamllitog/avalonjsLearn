@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="avalon.min.js"></script>
+</head>
+<body>
+<div ms-controller="simple">
+    <div ms-visible="icanvisible" >
+        此处可以看到
+    </div>
+    <div ms-visible="icantvisible" >
+        此处不可以看到
+    </div>
+</div>
+
+<script>
+    //avalon通过ms-visible="bool"实现对某个元素显示隐藏控制，它用是style.display="none"进行隐藏。
+    avalon.define({
+        $id: "simple",
+        icantvisible: false,
+        icanvisible: true
+    });
+
+</script>
+</body>
+</html>

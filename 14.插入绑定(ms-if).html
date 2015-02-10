@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>ms-if</title>
+    <script type="text/javascript" src="avalon.min.js"></script>
+</head>
+<body>
+<div ms-controller="test1">
+    <ul ms-each-item="array">
+        <!--ms-if="bool",同样隐藏，但它是将元素移出DOM。这个功能直接影响到CSS :empty伪类的渲染结果，因此比较有用。-->
+        <li ms-if="$index % 2 == 0">{{ item }} --- {{$index}}</li>
+    </ul>
+</div>
+
+<div ms-controller="test2">
+    <h1>{{aaa}}</h1>
+    <ul ms-if="array" ms-each-item="array">
+        <li ms-if="$index % 2 == 0">{{ item }} --- {{$index}}</li>
+    </ul>
+</div>
+
+<div ms-controller="test3">
+    <h1>{{aaa}}</h1>
+    <ul>
+        <!--出于某些原因，我们不想显示数组中的某些元素，就需要让ms-if拖延到它们之后才起作用，这时就要用到ms-if-loop-->
+        <li ms-repeat="array" ms-if-loop="el">{{ el }}</li>
+        <li>它总在最后</li>
+    </ul>
+</div>
+
+
+<script type="text/javascript">
+    //介绍一下avalon的扫描顺序，因为一个元素可能会存在多个属性。总的流程是这样的：
+    //ms-skip --> ms-important --> ms-controller --> ms-if --> ms-repeat --> ms-if-loop --> ms-each --> ms-with --> ms-duplex
+    avalon.define({
+        $id: "test1",
+        array: "a,b,c,d,e,f,g".split(",")
+    });
+
+    avalon.define('test2', function (vm) {
+        vm.aaa = "array不存在啊"
+    });
+
+    avalon.define({
+        $id: "test3",
+        array: ["aaa", "bbb", null, "ccc"]
+    });
+</script>
+</body>
+</html>

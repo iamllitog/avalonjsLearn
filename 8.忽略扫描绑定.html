@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="avalon.min.js"></script>
+</head>
+<body>
+<!--这是ms-skip负责。只要元素定义了这个属性，无论它的值是什么，它都不会扫描其他属性及它的子孙节点了。-->
+<div ms-controller="test" ms-skip>
+    <p
+            ms-repeat-num="cd"
+            ms-attr-name="num"
+            ms-data-xxx="$index">
+        {{$index}} - {{num}}
+    </p>
+    A：<div ms-each="arr">{{yy}}</div>
+</div>
+</body>
+</html>

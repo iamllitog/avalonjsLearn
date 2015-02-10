@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="avalon.min.js"></script>
+</head>
+<body>
+<script>
+    //avalon不允许在VM定义之后，再追加新属性与方法
+    var vm = avalon.define({
+        $id: "test",
+        test1: "点击测试按钮没反应 绑定失败"
+    });
+    vm.one = function () {
+        vm.test1 = "绑定成功";
+    };
+</script>
+<script>
+    //不允许在define里面直接调用方法或ajax
+    avalon.define("test", function (vm) {
+        alert(111) //这里会执行两次
+        $.ajax({  //这里会发出两次请来
+            async: false,
+            type: "post",
+            url: "sdfdsf/fdsfds/dsdd",
+            success: function (data) {
+                console.log(data)
+                avalon.mix(vm, data)
+            }
+        })
+    })
+</script>
+<script>
+    //正确的方式
+    var vm = avalon.define({
+        $id: "test",
+        aaa: "", //这里应该把所有AJAX都返回的数据都定义好
+        bbb: ""
+
+    })
+
+    $.ajax({  //这里会发出两次请来
+        async:false,
+        type: "post",
+        url: "sdfdsf/fdsfds/dsdd",
+        success: function(data){
+            for(var i in data){
+                if(vm.hasOwnProperty(i)){
+                    vm[i] = data[i]
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

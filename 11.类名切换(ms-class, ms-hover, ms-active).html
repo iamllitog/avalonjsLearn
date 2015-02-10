@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="avalon.min.js"></script>
+    <title></title>
+</head>
+<body>
+<div ms-controller="simple">
+    <div style="width:200px; height:50px" ms-css-background="background">
+    </div>
+    <select ms-duplex="background">
+        <option value="red">红</option>
+        <option value="yellow">黄</option>
+        <option value="green">绿</option>
+    </select>
+</div>
+<script>
+    //avalon提供了多种方式来绑定类名，有ms-class, ms-hover, ms-active
+    var simple = avalon.define({
+        $id : "simple",
+        background : "red"
+    });
+</script>
+</body>
+</html>

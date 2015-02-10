@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="avalon.min.js"></script>
+</head>
+<body ms-controller="test" >
+    <h3 ms-attr-name="testname" ms-click="click(testname)">点击我查看我的name属性</h3>
+<script>
+    //ms-attr-name="value"，这个允许我们在元素上绑定更多种类的属性，如className, tabIndex, name, colSpan什么的。
+    avalon.define({
+        $id: "test",
+        click : function (a) {
+            alert(a);
+        },
+        testname: "hahaha"
+    })
+</script>
+</body>
+</html>

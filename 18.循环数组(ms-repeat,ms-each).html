@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="avalon.min.js"></script>
+</head>
+<body>
+<div ms-controller="test">
+    <p>下面是ms-repeat的测试</p>
+    <ul>
+        <li ms-repeat-item="repeatArray">{{item}}</li>
+    </ul>
+    <p>下面是ms-each的测试</p>
+    <ul ms-each-item="repeatArray">
+        <li>{{item}} </li>
+    </ul>
+    <p>我们还可以通过data-repeat-rendered, data-each-rendered来指定这些元素都插入DOM被渲染了后执行的回调，this指向元素节点， 有一个参数表示为当前的操作，是add, del, move, index还是clear</p>
+    <ul>
+        <li  data-repeat-rendered="rendered"  ms-repeat-item="repeatArray">{{item}}</li>
+    </ul>
+</div>
+
+<script>
+    avalon.define({
+       $id:"test",
+        repeatArray:"a,b,c,d,e,f".split(','),
+        rendered : function (action) {
+            if(action === "add"){
+                avalon.log("渲染完毕")//注意，我们通过vm.array.push(4,5)添加元素，会连续两次触发rendered，第一次add，第二次为index
+            }
+        }
+    });
+    //el: 不一定叫这个名字，比如说ms-each-item，它就变成item了。默认为el。指向当前元素。
+    //$first: 判定是否为监控数组的第一个元素
+    //$last: 判定是否为监控数组的最后一个元素
+    //$index: 得到当前元素的索引值
+    //$outer: 得到外围循环的那个元素。
+    //$remove：这是一个方法，用于移除此元素
+</script>
+
+</body>
+</html>

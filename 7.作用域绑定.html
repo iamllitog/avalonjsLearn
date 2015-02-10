@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="avalon.min.js"></script>
+</head>
+<body>
+<!--如果一个页面非常复杂，就需要划分模块，每个模块交由不同的ViewModel去处理。我们就要用到ms-controller与ms-important来指定ViewModel了。我们看下面的例子：-->
+<div ms-controller="AAA">
+    <div>{{name}} :  {{color}}</div>
+    <div ms-controller="BBB">
+        <div>{{name}} :  {{color}}</div>
+        <div ms-controller="CCC">
+            <div>{{name}} :  {{color}}</div>
+        </div>
+        <div ms-important="DDD">
+            <div>{{name}} :  {{color}}</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    avalon.ready(function() {
+        avalon.define({
+            $id: "AAA",
+            name: "liger",
+            color: "green"
+        });
+        avalon.define({
+            $id: "BBB",
+            name: "sphinx",
+            color: "red"
+        });
+        avalon.define({
+            $id: "CCC",
+            name: "dragon" //不存在color
+        });
+        avalon.define({
+            $id: "DDD",
+            name: "sirenia" //不存在color
+        });
+        avalon.scan()
+    })
+    //可以看出ViewModel在DOM树的作用范围其实与CSS很相似，采取就近原则，如果当前ViewModel没有此字段 就找上一级ViewModel的同名字段，这个机制非常有利于团队协作。
+    //而ms-important就相当于CSS的important语句，强制这个区域使用此ViewModel，不再往上查找同名属性或方法！
+    //TODO 另，为了避免未经处理的原始模板内容在页面载入时在页面中一闪而过，我们可以使用以下样式
+    //.ms-controller,.ms-important,[ms-controller],[ms-important]{
+    //visibility: hidden;
+    //}
+</script>
+
+</body>
+</html>
