@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="avalon.min.js"></script>
+</head>
+<body ms-controller="filter">
+<p>html:{{htmlFilter | html}}</p>
+
+<p>sanitize:{{sanitizeFilter | sanitize | html}}</p>
+<!--多个过滤器一起工作-->
+<p>uppercase:{{uppercaseFilter | uppercase}}</p>
+
+<p>lowercase:{{lowercaseFilter | lowercase}}</p>
+
+<p>truncate:{{truncateFilter | truncate(10,'。。。')}}</p>
+
+<p>camelize:{{camelizeFilter | camelize}}</p>
+
+<p>escape:{{escapeFilter | escape}}</p>
+
+<p>currency:{{currencyFilter | currency('$')}}</p>
+
+<p>number:{{numberFilter | number('5')}}</p>
+
+<p>date:{{myDate | date("yyyy-MM-dd HH:mm:ss")}}</p>
+
+<p>myfilter:{{myfilter | myfilter("world")}}</p>
+
+<script>
+    avalon.define({
+        $id: 'filter',
+        //没有传参，用于将文本绑定转换为HTML绑定
+        htmlFilter: '<b style="background-color: red;">haha</b>',
+        //去掉onclick, javascript:alert等可能引起注入攻击的代码。
+        sanitizeFilter: '<b onclick="javascript:alert(1);">haha</b>',
+        //大写化
+        uppercaseFilter: 'dhsahjdlsajdij',
+        //小写化
+        lowercaseFilter: 'SJFIOJWIDOI',
+        //对长字符串进行截短，truncate(number, truncation), number默认为30，truncation为(省略号)“...”
+        truncateFilter: 'dsadsaddsadasdasdhahaa',
+        //驼峰化处理
+        camelizeFilter: 'hahah?',
+        //对类似于HTML格式的字符串进行转义，把尖括号转换为&gt; &lt;
+        escapeFilter: '<b style="background-color: red;">haha</b>',
+        //对数字添加货币符号，以及千位符， currency(symbol)
+        currencyFilter: 110000,
+        //对数字进行各种格式化，这与与PHP的number_format完全兼容， number(decimals, dec_point, thousands_sep),
+        //decimals	可选，规定多少个小数位。
+        //dec_point	可选，规定用作小数点的字符串（默认为 . ）。
+        //thousands_sep	可选，规定用作千位分隔符的字符串（默认为 , ），如果设置了该参数，那么所有其他参数都是必需的。
+        numberFilter: 1000000,
+        //对日期进行格式化，date(formats)
+//    'yyyy': 4 digit representation of year (e.g. AD 1 => 0001, AD 2010 => 2010)
+//    'yy': 2 digit representation of year, padded (00-99). (e.g. AD 2001 => 01, AD 2010 => 10)
+//    'y': 1 digit representation of year, e.g. (AD 1 => 1, AD 199 => 199)
+//    'MMMM': Month in year (January-December)
+//    'MMM': Month in year (Jan-Dec)
+//    'MM': Month in year, padded (01-12)
+//    'M': Month in year (1-12)
+//    'dd': Day in month, padded (01-31)
+//    'd': Day in month (1-31)
+//    'EEEE': Day in Week,(Sunday-Saturday)
+//    'EEE': Day in Week, (Sun-Sat)
+//    'HH': Hour in day, padded (00-23)
+//    'H': Hour in day (0-23)
+//    'hh': Hour in am/pm, padded (01-12)
+//    'h': Hour in am/pm, (1-12)
+//    'mm': Minute in hour, padded (00-59)
+//    'm': Minute in hour (0-59)
+//    'ss': Second in minute, padded (00-59)
+//    's': Second in minute (0-59)
+//    'a': am/pm marker
+//    'Z': 4 digit (+sign) representation of the timezone offset (-1200-+1200)
+//    format string can also be one of the following predefined localizable formats:
+//    'medium': equivalent to 'MMM d, y h:mm:ss a' for en_US locale (e.g. Sep 3, 2010 12:05:08 pm)
+//    'short': equivalent to 'M/d/yy h:mm a' for en_US locale (e.g. 9/3/10 12:05 pm)
+//    'fullDate': equivalent to 'EEEE, MMMM d,y' for en_US locale (e.g. Friday, September 3, 2010)
+//    'longDate': equivalent to 'MMMM d, y' for en_US locale (e.g. September 3, 2010
+//    'mediumDate': equivalent to 'MMM d, y' for en_US locale (e.g. Sep 3, 2010)
+//    'shortDate': equivalent to 'M/d/yy' for en_US locale (e.g. 9/3/10)
+//    'mediumTime': equivalent to 'h:mm:ss a' for en_US locale (e.g. 12:05:08 pm)
+//    'shortTime': equivalent to 'h:mm a' for en_US locale (e.g. 12:05 pm)
+        myDate : new Date(),
+        myfilter : 'hello'
+    })
+
+    avalon.filters.myfilter = function(str, args){//str为管道符之前计算得到的结果，默认框架会帮你传入，此方法必须返回一个值
+        return str +" "+ args;
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="avalon.min.js"></script>
+</head>
+<body>
+
+<script>
+    //每一个VM都拥有$watch, $unwatch, $fire这三个方法，及一个$events对象。$events是用于储存各种回调。先从单个VM说起，如果一个VM拥有aaa这个属性，如果我们在VM通过$watch对它监控，那么当aaa改变值时，它对应的回调就会被触发！
+    //注意，它只能监听当前属性的变动。
+    var vmodel = avalon.define({
+        $id: "test",
+        aaa: 111
+    })
+    vmodel.$watch("aaa", function(newValue, oldValue){
+        alert("newValue:"+newValue) //222
+        alert("oldValue:"+oldValue) //111
+    })
+    setTimeout(function(){
+        vmodel.aaa = 222
+    }, 2000);
+    setTimeout(function(){
+        //有时，我们还绑定了一些与属性名无关的事件回调，想触发它，那只能使用$fire方法了。$fire方法第一个参数为属性名（自定义事件名），其他参数随意。
+        vmodel.$fire("aaa",10,11);
+    }, 4000)
+    setTimeout(function(){
+        //我们还可以通过$unwatch方法，移除对应的回调。如果传入两个参数，第一个是属性名，第二个是回调，那么只移除此回调；如果只传入一个属性名，那么此属性关联的所有回调都会被移除掉。
+        vmodel.$unwatch("aaa");
+    }, 6000);
+    setTimeout(function(){
+        vmodel.aaa = 333
+    }, 8000);
+</script>
+</body>
+</html>

@@ -3,8 +3,27 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+    <script type="text/javascript" src="avalon.min.js"></script>
 </head>
 <body>
 
+<script>
+    var vmodel = avalon.define({
+        $id: "test",
+        aaa: 111,
+        bbb: 222
+
+    })
+    vmodel.$watch("$all", function(){
+        //有时我们想在任何属性变化时都触发某一个回调，这时我们就需要$watch一个特殊的属性了——“$all”。不同的是，$watch回调的参数多了一个属性名，排在最前面。
+        alert(avalon.slice(arguments))
+        // ["aaa", 2, 111]
+        // ["bbb", 3, 222]
+    })
+    setTimeout(function(){
+        vmodel.aaa = 2
+        vmodel.bbb = 3
+    }, 2000)
+</script>
 </body>
 </html>
